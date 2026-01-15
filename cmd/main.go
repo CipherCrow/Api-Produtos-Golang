@@ -1,9 +1,10 @@
 package main
 
 import (
-	CasosDeUso "api-produtos-golang/casosDeUso"
+	"api-produtos-golang/casosDeUso"
 	"api-produtos-golang/controller"
 	"api-produtos-golang/db"
+	"api-produtos-golang/repository"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,9 +18,10 @@ func main() {
 		panic(err)
 	}
 	//repository
+	produtoRepository := repository.NewProdutoRepository(dbConnection)
 
 	// Casos de Uso
-	produtoCasoDeUso := CasosDeUso.NewProductUseCase()
+	produtoCasoDeUso := casosDeUso.NewProductUseCase(produtoRepository)
 
 	//Controllers
 	productController := controller.NewProductController(produtoCasoDeUso)
@@ -31,6 +33,7 @@ func main() {
 	})
 
 	server.GET("/produtos/", productController.GetProducts)
+	server.POST("/produtos/", productController.CadastrarProduto)
 
 	server.Run(":8000")
 }
