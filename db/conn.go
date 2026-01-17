@@ -6,11 +6,11 @@ import (
 )
 
 const (
-	host   = "localhost"
+	host   = "go_db"
 	port   = 5432
 	user   = "postgres"
-	pass   = "1234"
-	dbname = "postgres"
+	pass   = "password"
+	dbname = "go_database"
 )
 
 func ConnectDB() (*sql.DB, error) {
