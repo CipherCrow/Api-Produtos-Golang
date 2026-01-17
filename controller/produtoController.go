@@ -4,6 +4,7 @@ import (
 	usecase "api-produtos-golang/casosDeUso"
 	"api-produtos-golang/model"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,41 @@ func (p *ProdutoController) GetAllProducts(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, produtos)
+}
+
+func (p *ProdutoController) FindProductById(ctx *gin.Context) {
+
+	id := ctx.Param("idProduto")
+
+	if id == "" {
+		response := model.Response{
+			Message: "Id do produto não pode ser nulo!",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	idProduto, err := strconv.Atoi(id)
+
+	if err != nil {
+		response := model.Response{
+			Message: "Id do produto precisa ser um numero!",
+		}
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	produto, err := p.produtoUseCase.GetProductById(idProduto)
+
+	if produto != nil {
+		response := model.Response{
+			Message: "Produto nao foi encontrado!",
+		}
+		ctx.JSON(http.StatusNotFound, response)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, produto)
 }
 
 func (p *ProdutoController) CadastrarProduto(ctx *gin.Context) {

@@ -32,8 +32,9 @@ func main() {
 		})
 	})
 
-	server.GET("/produtos/", productController.GetProducts)
-	server.POST("/produtos/", productController.CadastrarProduto)
+	server.GET("/produtos/getAll", productController.GetProducts)
+	server.POST("/produtos/adicionar", productController.CadastrarProduto)
+	server.GET("/produtos/:id", productController.FindProductById)
 
 	server.Run(":8000")
 }

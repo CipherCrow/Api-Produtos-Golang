@@ -17,6 +17,16 @@ func (pu *ProdutoCasoDeUso) GetAllProducts() ([]model.Product, error) {
 	return pu.repository.GetAllProducts()
 }
 
+func (pu *ProdutoCasoDeUso) GetProductById(idProduto int) (*model.Product, error) {
+
+	produto, err := pu.GetProductById(idProduto)
+
+	if err != nil {
+		return nil, err
+	}
+	return produto, nil
+}
+
 func (pu *ProdutoCasoDeUso) Save(product model.Product) (model.Product, error) {
 	productId, err := pu.repository.Save(product)
 

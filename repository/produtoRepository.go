@@ -66,3 +66,31 @@ func (pr *ProdutoRepository) Save(product model.Product) (int, error) {
 	query.Close()
 	return id, nil
 }
+
+func (pr *ProdutoRepository) GetProductById(id int) (*model.Product, error) {
+	query, err := pr.connection.Prepare("SELECT * FROM product WHERE id = $1")
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	var produto model.Product
+
+	err = query.QueryRow(id).Scan(
+		&produto.ID,
+		&produto.Name,
+		&produto.Price,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, err
+		}
+
+		fmt.Println(err)
+		return nil, err
+	}
+
+	query.Close()
+	return &produto, nil
+}
